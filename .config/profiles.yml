@@ -1,0 +1,31 @@
+default:
+    target: analytics
+    outputs:
+      analytics:
+        type: redshift
+
+        # More information for the options in this file
+        # can be found here: https://docs.getdbt.com/dbt-cli/configure-your-profile
+
+        threads: 8
+        # Additional Redshift options
+        # Find out more about Redshift config options here:
+        # https://docs.getdbt.com/reference/warehouse-profiles/redshift-profile
+
+        # Set the TEST_DATABASE in your CI
+        dbname: "{{ env_var('DBT_DATABASE') }}"
+        schema: analytics
+
+        # Set variable DBT_USER in your CI
+        user: "{{ env_var('DBT_USER') }}"
+
+        # Set variable DBT_PASSWORD in your CI
+        password: "{{ env_var('DBT_PASSWORD') }}"
+
+        # Set variable DBT_REDSHIFT_ACCOUNT in your CI
+        host: "{{ env_var('DBT_REDSHIFT_ACCOUNT') }}"
+
+        port: 5439
+        keepalives_idle: 0 # default 0, indicating the system default
+        # search_path: public # optional, not recommended
+        # sslmode: [optional, set the sslmode used to connect to the database (in case this parameter is set, will look for ca in ~/.postgresql/root.crt)]

@@ -1,37 +1,40 @@
+name: schedule_dbt_job
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+DBT_PROFILES_DIR: ./
+
+DBT_USER: ${{ secrets.DBT_USER }}
+DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
+
+jobs:
+schedule_dbt_job:
    name: schedule_dbt_job
+   runs-on: ubuntu-latest
 
-   on:
-   push:
-       branches:
-       - main
+   steps:
+   - name: Check out
+       uses: actions/checkout@master
 
-   env:
-   DBT_PROFILES_DIR: ./
+   - uses: actions/setup-python@v3
+       with:
+       python-version: "3.8"
 
-   DBT_USER: ${{ secrets.DBT_USER }}
-   DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
+   - name: Install dependencies
+       run: |
+       pip install dbt
+       dbt deps
 
-   jobs:
-   schedule_dbt_job:
-       name: schedule_dbt_job
-       runs-on: ubuntu-latest
+   # dbt related commands here - run use --target prod/dev to run for specific environments
+   - name: Compile models
+       run: dbt compile
 
-       steps:
-       - name: Check out
-           uses: actions/checkout@master
-
-       - uses: actions/setup-python@v3
-           with:
-           python-version: "3.8"
-
-       - name: Install dependencies
-           run: |
-           pip install dbt
-           dbt deps
-
-       # dbt related commands here - run use --target prod/dev to run for specific environments
-       - name: Compile models
-           run: dbt compile
-
-       - name: Build catalog
-           run: dbt docs generate
+   - name: Build catalog
+       run: dbt docs generate

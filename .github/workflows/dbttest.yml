@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install dbt
+          pip install dbt-redshift
           dbt deps
 
       - name: Compile models

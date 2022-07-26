@@ -8,35 +8,33 @@ on:
     branches:
       - main
 
-env:
-DBT_PROFILES_DIR: ./
-DBT_HOST: ${{ secrets.DBT_HOST }}
-DBT_USER: ${{ secrets.DBT_USER }}
-DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
-DBT_PORT: ${{ secrets.DBT_PORT }}
-DBT_DATABASE: ${{ secrets.DBT_DATABASE }}
-
 jobs:
-schedule_dbt_job:
-   name: schedule_dbt_job
-   runs-on: ubuntu-latest
+  build:
+    name: DBT CI
+    runs-on: ubuntu-latest
+    env:
+      DBT_PROFILES_DIR: ./
+      DBT_HOST: ${{ secrets.DBT_HOST }}
+      DBT_USER: ${{ secrets.DBT_USER }}
+      DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
+      DBT_PORT: ${{ secrets.DBT_PORT }}
+      DBT_DATABASE: ${{ secrets.DBT_DATABASE }}
 
-   steps:
-   - name: Check out
-       uses: actions/checkout@master
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v3
+          with:
+          python-version: "3.8"
 
-   - uses: actions/setup-python@v3
-       with:
-       python-version: "3.8"
+      - name: Install dependencies
+          run: |
+           pip install dbt
+           dbt deps
 
-   - name: Install dependencies
-       run: |
-       pip install dbt
-       dbt deps
+      - name: Compile models
+          run: dbt compile
 
-   # dbt related commands here - run use --target prod/dev to run for specific environments
-   - name: Compile models
-       run: dbt compile
-
-   - name: Build catalog
-       run: dbt docs generate
+      - name: Build catalog
+          run: dbt docs generate

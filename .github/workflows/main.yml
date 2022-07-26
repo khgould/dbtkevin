@@ -28,9 +28,9 @@ jobs:
       - name: seed
         uses: datacoves/dbt-coves-action@v1
         with:
-          command: "dbt seed --full-refresh"
+          command: "dbt compile --full-refresh"
 
       - name: seed
         uses: datacoves/dbt-coves-action@v1
         with:
-          command: "dbt seed --full-refresh"
+          command: "dbt docs generate"

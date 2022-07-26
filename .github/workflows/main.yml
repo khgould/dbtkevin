@@ -1,4 +1,4 @@
-name: Seed, Run, Check, Test and Docs
+name: Compile and Generate Catalog
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       DBT_USER: ${{ secrets.DBT_USER }}
       DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
       DBT_DATABASE: ${{ secrets.DBT_DATABASE }}
-      DBT_PROFILES_DIR: .config
+      DBT_PROFILES_DIR: ..
       DBT_REDSHIFT_ACCOUNT: ${{ secrets.DBT_HOST }}
 
     steps:

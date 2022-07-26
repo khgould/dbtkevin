@@ -15,11 +15,11 @@ jobs:
     name: Main CI
     runs-on: ubuntu-latest
     env:
-      DBT_USER: ${{ secrets.DBT_PROD_USER }}
-      DBT_PASSWORD: ${{ secrets.DBT_PROD_PASSWORD }}
-      DBT_DATABASE: ${{ secrets.DBT_PROD_DATABASE }}
+      DBT_USER: ${{ secrets.DBT_USER }}
+      DBT_PASSWORD: ${{ secrets.DBT_PASSWORD }}
+      DBT_DATABASE: ${{ secrets.DBT_DATABASE }}
       DBT_PROFILES_DIR: .config
-      DBT_REDSHIFT_ACCOUNT: ${{ secrets.DBT_REDSHIFT_ACCOUNT }}
+      DBT_REDSHIFT_ACCOUNT: ${{ secrets.DBT_HOST }}
 
     steps:
       - name: Checkout branch
@@ -30,28 +30,7 @@ jobs:
         with:
           command: "dbt seed --full-refresh"
 
-      - name: dbt run
+      - name: seed
         uses: datacoves/dbt-coves-action@v1
         with:
-          command: "dbt run"
-
-      - name: check
-        uses: datacoves/dbt-coves-action@v1
-        with:
-          command: "dbt-coves check --no-fix"
-
-      - name: test
-        uses: datacoves/dbt-coves-action@v1
-        with:
-          command: "dbt test"
-
-      - name: generate docs
-        uses: datacoves/dbt-coves-action@v1
-        with:
-          command: "dbt docs generate"
-
-      - name: deploy docs 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.4
-        with:
-          branch: gh-pages
-          folder: target
+          command: "dbt seed --full-refresh"

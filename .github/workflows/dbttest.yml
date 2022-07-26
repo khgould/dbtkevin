@@ -29,12 +29,12 @@ jobs:
           python-version: "3.8"
 
       - name: Install dependencies
-          run: |
-           pip install dbt
-           dbt deps
+        run: |
+          pip install dbt
+          dbt deps
 
       - name: Compile models
-          run: dbt compile
+        run: dbt compile
 
       - name: Build catalog
-          run: dbt docs generate
+        run: dbt docs generate
